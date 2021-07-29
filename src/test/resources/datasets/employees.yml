@@ -1,0 +1,9 @@
+employee:
+  - employee_id: 1
+    employee_name: "jack"
+    employee_email: "jack@gmail.com"
+    employee_address:
+  - employee_id: 2
+    employee_name: "jon"
+    employee_email: "jon@gmail.com"
+    employee_address: "CANADA"

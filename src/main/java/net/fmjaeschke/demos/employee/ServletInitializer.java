@@ -1,0 +1,21 @@
+package net.fmjaeschke.demos.employee;
+
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+
+import javax.servlet.ServletContext;
+
+public class ServletInitializer extends SpringBootServletInitializer {
+
+	@Override
+	public void onStartup(ServletContext servletContext) {
+		servletContext.setInitParameter(
+				"spring.profiles.active", "webcontainer");
+	}
+
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(EmployeeApplication.class);
+	}
+
+}
