@@ -17,6 +17,10 @@ import java.util.*;
 @Repository
 public class EmployeeRepository {
 
+    private static final String EMPLOYEE_ID = "employee_id";
+    private static final String EMPLOYEE_NAME = "employee_name";
+    private static final String EMPLOYEE_EMAIL = "employee_email";
+    private static final String EMPLOYEE_ADDRESS = "employee_address";
     private final NamedParameterJdbcTemplate template;
 
     @Inject
@@ -36,10 +40,10 @@ public class EmployeeRepository {
         String employeeId = UUID.randomUUID().toString();
 
         SqlParameterSource param = new MapSqlParameterSource()
-                .addValue("employee_id", employeeId)
-                .addValue("employee_name", employee.getEmployeeName())
-                .addValue("employee_email", employee.getEmployeeEmail())
-                .addValue("employee_address", employee.getEmployeeAddress());
+                .addValue(EMPLOYEE_ID, employeeId)
+                .addValue(EMPLOYEE_NAME, employee.getEmployeeName())
+                .addValue(EMPLOYEE_EMAIL, employee.getEmployeeEmail())
+                .addValue(EMPLOYEE_ADDRESS, employee.getEmployeeAddress());
         template.update(sql,param, holder);
 
         return findById(employeeId);
@@ -49,10 +53,10 @@ public class EmployeeRepository {
         final String sql = "update employee set employee_name=:employee_name, employee_address=:employee_address, employee_email=:employee_email where employee_id=:employee_id";
 
         Map<String,Object> map= new HashMap<>();
-        map.put("employee_id", employee.getEmployeeId());
-        map.put("employee_name", employee.getEmployeeName());
-        map.put("employee_email", employee.getEmployeeEmail());
-        map.put("employee_address", employee.getEmployeeAddress());
+        map.put(EMPLOYEE_ID, employee.getEmployeeId());
+        map.put(EMPLOYEE_NAME, employee.getEmployeeName());
+        map.put(EMPLOYEE_EMAIL, employee.getEmployeeEmail());
+        map.put(EMPLOYEE_ADDRESS, employee.getEmployeeAddress());
 
         template.execute(sql,map, (PreparedStatementCallback<Object>) PreparedStatement::executeUpdate);
     }
@@ -61,7 +65,7 @@ public class EmployeeRepository {
         final String sql = "delete from employee where employee_id=:employee_id";
 
         Map<String,Object> map= new HashMap<>();
-        map.put("employee_id", employee.getEmployeeId());
+        map.put(EMPLOYEE_ID, employee.getEmployeeId());
 
         template.execute(sql,map, (PreparedStatementCallback<Object>) PreparedStatement::executeUpdate);
     }
@@ -73,7 +77,7 @@ public class EmployeeRepository {
         try {
             employee = template.queryForObject(
                     sql,
-                    new MapSqlParameterSource("employee_id", employeeId),
+                    new MapSqlParameterSource(EMPLOYEE_ID, employeeId),
                     new EmployeeRowMapper());
         } catch (EmptyResultDataAccessException e) {
             employee = null;
