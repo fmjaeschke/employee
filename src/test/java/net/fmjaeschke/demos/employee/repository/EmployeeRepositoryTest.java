@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles("test")
 @DataSet("employees.yml")
-public class EmployeeRepositoryTest {
+class EmployeeRepositoryTest {
 
     @Autowired
     private EmployeeRepository repository;
