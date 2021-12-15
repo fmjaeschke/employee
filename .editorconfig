@@ -2,15 +2,13 @@ root = true
 
 [*]
 end_of_line = lf
-insert_final_newline = true
+insert_final_newline = false
 indent_style = space
 indent_size = 4
-
-[*.java]
 charset = utf-8
 
 [*.properties]
 charset = latin1
 
-[*.xml]
-charset = utf-8
+[*.yml]
+indent_size = 2
