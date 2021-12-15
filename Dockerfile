@@ -1,4 +1,4 @@
-ARG BUILD_IMAGE=maven:3.8.1-jdk-8
+ARG BUILD_IMAGE=maven:3.8.1-jdk-11
 ARG RUNTIME_IMAGE=tomcat:8.5
 
 ARG DB_URL
