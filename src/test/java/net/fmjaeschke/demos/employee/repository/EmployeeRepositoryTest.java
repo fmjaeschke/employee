@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @DataSet("employees.yml")
 @ContextConfiguration(initializers = EmployeeRepositoryTest.DockerPostgreDataSourceInitializer.class)
-@Testcontainers
+@Testcontainers(disabledWithoutDocker = true)
 class EmployeeRepositoryTest {
 
     @Container
