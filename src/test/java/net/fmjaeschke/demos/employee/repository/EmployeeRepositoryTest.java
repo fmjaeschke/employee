@@ -2,16 +2,21 @@ package net.fmjaeschke.demos.employee.repository;
 
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.DBUnitExtension;
-import com.google.common.collect.Lists;
 import net.fmjaeschke.demos.employee.domain.Employee;
 import org.assertj.core.api.SoftAssertions;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
-
-import java.util.List;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.support.TestPropertySourceUtils;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,7 +24,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles("test")
 @DataSet("employees.yml")
+@ContextConfiguration(initializers = EmployeeRepositoryTest.DockerPostgreDataSourceInitializer.class)
+@Testcontainers
 class EmployeeRepositoryTest {
+
+    @Container
+    private final static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:14.2");
 
     @Autowired
     private EmployeeRepository repository;
@@ -27,14 +37,12 @@ class EmployeeRepositoryTest {
     @Test
     @DataSet(cleanBefore = true)
     void shouldFindAllIfEmpty() {
-        List<Employee> employees = Lists.newArrayList(repository.findAll());
-        assertThat(employees).isEmpty();
+        assertThat(repository.findAll()).isEmpty();
     }
 
     @Test
     void shouldFindAll() {
-        List<Employee> employees = Lists.newArrayList(repository.findAll());
-        assertThat(employees).hasSize(2);
+        assertThat(repository.findAll()).hasSize(2);
     }
 
     @Test
@@ -94,6 +102,19 @@ class EmployeeRepositoryTest {
         Employee employee = repository.findById("1");
         assertThat(employee.getEmployeeName()).isEqualTo("jon");
         assertThat(employee.getEmployeeEmail()).isEqualTo("jon@gmail.com");
+    }
+
+    public static class DockerPostgreDataSourceInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+
+        @Override
+        public void initialize(@NotNull ConfigurableApplicationContext applicationContext) {
+            TestPropertySourceUtils.addInlinedPropertiesToEnvironment(
+                applicationContext,
+                "spring.datasource.url=" + postgreSQLContainer.getJdbcUrl(),
+                "spring.datasource.username=" + postgreSQLContainer.getUsername(),
+                "spring.datasource.password=" + postgreSQLContainer.getPassword()
+            );
+        }
     }
 }
 

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -26,11 +27,9 @@ public class EmployeeService {
     }
 
     public Employee insertEmployee(Employee employee) throws EmployeeNotFoundException {
-        Employee newEmployee = employeeRepository.insertEmployee(employee);
-        if (newEmployee == null) {
-            throw new EmployeeNotFoundException();
-        }
-        return newEmployee;
+        return Optional
+            .ofNullable(employeeRepository.insertEmployee(employee))
+            .orElseThrow(EmployeeNotFoundException::new);
     }
 
     public void updateEmployee(Employee employee) {
@@ -42,10 +41,8 @@ public class EmployeeService {
     }
 
     public Employee findEmployee(String employeeId) throws EmployeeNotFoundException {
-        Employee employee = employeeRepository.findById(employeeId);
-        if (employee == null) {
-            throw new EmployeeNotFoundException();
-        }
-        return employee;
+        return Optional
+            .ofNullable(employeeRepository.findById(employeeId))
+            .orElseThrow(EmployeeNotFoundException::new);
     }
 }

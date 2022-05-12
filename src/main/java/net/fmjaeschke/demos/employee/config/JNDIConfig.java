@@ -16,6 +16,7 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @PropertySource("classpath:persistence-jndi.properties")
 public class JNDIConfig {
+    private static final String JDBC_URL = "jdbc.url";
 
     private final Environment environment;
 
@@ -27,6 +28,7 @@ public class JNDIConfig {
     @Bean
     @Profile("webcontainer")
     public DataSource dataSource() throws NamingException {
-        return (DataSource) new JndiTemplate().lookup(environment.getProperty("jdbc.url"));
+        String jdbcUrl = environment.getRequiredProperty(JDBC_URL);
+        return (DataSource) new JndiTemplate().lookup(jdbcUrl);
     }
 }

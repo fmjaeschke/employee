@@ -6,13 +6,12 @@ import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
 import java.sql.PreparedStatement;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
 @Repository
 public class EmployeeRepository {
@@ -35,8 +34,6 @@ public class EmployeeRepository {
     public Employee insertEmployee(Employee employee) {
         final String sql = "insert into employee(employee_id, employee_name, employee_address, employee_email) values(:employee_id, :employee_name, :employee_address, :employee_email)";
 
-        KeyHolder holder = new GeneratedKeyHolder();
-
         String employeeId = UUID.randomUUID().toString();
 
         SqlParameterSource param = new MapSqlParameterSource()
@@ -44,7 +41,7 @@ public class EmployeeRepository {
                 .addValue(EMPLOYEE_NAME, employee.getEmployeeName())
                 .addValue(EMPLOYEE_EMAIL, employee.getEmployeeEmail())
                 .addValue(EMPLOYEE_ADDRESS, employee.getEmployeeAddress());
-        template.update(sql,param, holder);
+        template.update(sql,param);
 
         return findById(employeeId);
     }
@@ -52,22 +49,21 @@ public class EmployeeRepository {
     public void updateEmployee(Employee employee) {
         final String sql = "update employee set employee_name=:employee_name, employee_address=:employee_address, employee_email=:employee_email where employee_id=:employee_id";
 
-        Map<String,Object> map= new HashMap<>();
-        map.put(EMPLOYEE_ID, employee.getEmployeeId());
-        map.put(EMPLOYEE_NAME, employee.getEmployeeName());
-        map.put(EMPLOYEE_EMAIL, employee.getEmployeeEmail());
-        map.put(EMPLOYEE_ADDRESS, employee.getEmployeeAddress());
-
-        template.execute(sql,map, (PreparedStatementCallback<Object>) PreparedStatement::executeUpdate);
+        SqlParameterSource param = new MapSqlParameterSource()
+            .addValue(EMPLOYEE_ID, employee.getEmployeeId())
+            .addValue(EMPLOYEE_NAME, employee.getEmployeeName())
+            .addValue(EMPLOYEE_EMAIL, employee.getEmployeeEmail())
+            .addValue(EMPLOYEE_ADDRESS, employee.getEmployeeAddress());
+        template.execute(sql, param, (PreparedStatementCallback<Object>) PreparedStatement::executeUpdate);
     }
 
     public void deleteEmployee(Employee employee) {
         final String sql = "delete from employee where employee_id=:employee_id";
 
-        Map<String,Object> map= new HashMap<>();
-        map.put(EMPLOYEE_ID, employee.getEmployeeId());
+        SqlParameterSource param = new MapSqlParameterSource()
+            .addValue(EMPLOYEE_ID, employee.getEmployeeId());
 
-        template.execute(sql,map, (PreparedStatementCallback<Object>) PreparedStatement::executeUpdate);
+        template.execute(sql, param, (PreparedStatementCallback<Object>) PreparedStatement::executeUpdate);
     }
 
     public Employee findById(String employeeId) {
