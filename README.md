@@ -9,13 +9,13 @@ variables in Docker container.
 
 To get startet provide a ".env" file with following content:
 
-| Property | Description |
-| --- | --- |
-| DB_URL | Jdbc url for example: jdbc:postgresql://Calisto:5432/lotte |
-| DB_USER | the database user |
-| DB_PASSWORD | the password of the database user |
-| DB_DRIVER_CLASS | Jdbc driver class for example: org.postgresql.Driver |
-| DB_DRIVER | for example: org.postgresql:postgresql:42.2.23 |
+| Property        | Description                                                |
+|-----------------|------------------------------------------------------------|
+| DB_URL          | Jdbc url for example: jdbc:postgresql://Calisto:5432/lotte |
+| DB_USER         | the database user                                          |
+| DB_PASSWORD     | the password of the database user                          |
+| DB_DRIVER_CLASS | Jdbc driver class for example: org.postgresql.Driver       |
+| DB_DRIVER       | for example: org.postgresql:postgresql:42.2.23             |
 
 The .env file is excluded from GIT !
 
