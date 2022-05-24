@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class EmployeeRepositoryTest {
 
     @Container
-    private final static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:14.2");
+    private final static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:14.3");
 
     @Autowired
     private EmployeeRepository repository;
