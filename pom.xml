@@ -17,7 +17,7 @@
         <java.version>11</java.version>
 
         <rider.version>1.32.3</rider.version>
-        <testcontainers.version>1.17.1</testcontainers.version>
+        <testcontainers.version>1.17.2</testcontainers.version>
     </properties>
     <dependencies>
         <dependency>
